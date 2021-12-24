@@ -1,7 +1,7 @@
 import pygame as pg
 from circle import Circle
 
-circ = Circle(int(input()))
+circ = Circle(30)
 kx = 0; ky = 0
 kxx = 1; kyy = 1
 white = (255, 255, 255)
@@ -13,11 +13,8 @@ gameScreen = pg.display.set_mode((640, 360))
 gameScreen.fill((black))
 runGame = True
 pg.display.update()
-
+k = False
 while runGame:
-    for i in pg.event.get():
-        if i.type == pg.QUIT:
-            runGame = False
     centralx = circ.radius
     centraly = circ.radius
     if (centralx + circ.radius + kx >= 640):
@@ -30,6 +27,15 @@ while runGame:
         kyy = 1
     kx += kxx
     ky += kyy
-    pg.draw.circle(gameScreen, black, (centralx + kx - kxx, centraly + ky - kyy), circ.radius)
-    pg.draw.circle(gameScreen, white, (centralx + kx, centraly + ky), circ.radius)
-    pg.display.update()
+    for i in pg.event.get():
+        if i.type == pg.QUIT:
+            runGame = False
+        if i.type == pg.MOUSEBUTTONUP:
+            k = True
+            kx, ky = pg.mouse.get_pos()
+            kx -= circ.radius
+            ky -= circ.radius
+    if k:
+        pg.draw.circle(gameScreen, black, (centralx + kx - kxx, centraly + ky - kyy), circ.radius)
+        pg.draw.circle(gameScreen, white, (centralx + kx, centraly + ky), circ.radius)
+        pg.display.update()
